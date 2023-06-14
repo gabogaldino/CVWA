@@ -11,15 +11,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Run Snyk to check Kubernetes manifest file for issues
+    - name: Run Snyk to check for vulnerabilities
       run: |
         curl https://static.snyk.io/cli/latest/snyk-linux -o snyk
         chmod +x ./snyk
         mv ./snyk /usr/local/bin/
         snyk auth ${{ secrets.SNYK_TOKEN }}
-        snyk iac test --sarif --sarif-file-output=snyk.sarif || true
+        snyk code test --sarif --sarif-file-output=snyk.sarif || true
         cp snyk.sarif /tmp
-        
+       
     - name: save results file
       uses: actions/upload-artifact@v3
       with:
